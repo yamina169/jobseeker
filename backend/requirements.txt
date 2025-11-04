@@ -1,0 +1,16 @@
+django
+djangorestframework
+django-cors-headers
+django-allauth
+psycopg2-binary
+djangorestframework-simplejwt
+pandas
+spacy
+nltk
+sentence-transformers
+scikit-learn
+PyPDF2
+tqdm
+selenium
+
+#python -m spacy download fr_core_news_sm

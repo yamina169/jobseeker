@@ -1,0 +1,70 @@
+# === Django & Python ===
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.sqlite3
+db.sqlite3
+
+# === Environment ===
+.env
+venv/
+env/
+venv*/
+ENV*/
+.venv*/
+.Python
+
+# === Logs & cache ===
+*.log
+*.pot
+*.py[cod]
+__pycache__/
+*.mo
+*.swp
+*.swo
+*.bak
+*.tmp
+*.DS_Store
+
+# === IDEs & Editors ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === Django specific ===
+staticfiles/
+media/
+node_modules/
+*.pid
+*.seed
+*.cover
+local_settings.py
+
+# === Test & coverage ===
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# === Migrations cache ===
+*/migrations/__pycache__/
+*/migrations/*.pyc
+# (Optionnel) pour ignorer les migrations :
+# */migrations/
+
+# === Backup files ===
+*.bak
+*.orig
+
+# === Jupyter / Colab ===
+.ipynb_checkpoints/
+
+# === Docker ===
+*.dockerfile
+docker-compose*.yml
+
