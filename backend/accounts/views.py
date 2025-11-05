@@ -70,10 +70,22 @@ class AllAuthRegisterView(SignupView):
 
 
 # Vue pour inscription
+# views.py
 class RegisterView(generics.CreateAPIView):
     queryset = JobSeeker.objects.all()
     serializer_class = JobSeekerSerializer
     permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        # Récupérer le rôle envoyé par la requête
+        role = self.request.data.get('role', None)
+        
+        # Si aucun rôle n’est fourni, on assigne "jobseeker" par défaut
+        if not role:
+            role = 'jobseeker'
+
+        serializer.save(role=role)
+
 
 # Vue pour login
 class LoginView(generics.GenericAPIView):

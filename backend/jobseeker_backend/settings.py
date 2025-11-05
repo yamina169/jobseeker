@@ -170,7 +170,7 @@ AUTH_USER_MODEL = 'accounts.JobSeeker'
 SITE_ID = 1
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React dev server
+    "http://localhost:5173",  # React dev server
 ]
 AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
 
