@@ -22,7 +22,7 @@ class ResumeMatchingAPI(APIView):
             tmp_path = tmp.name
 
         try:
-            csv_path = os.path.join(settings.BASE_DIR, "data", "offres_brutes", "all_jobs_combined.csv")
+            csv_path = os.path.join(settings.BASE_DIR, "data", "all_jobs_combined.csv")
             results = match_resume_with_jobs(tmp_path, csv_path, top_n=10)
             os.remove(tmp_path)
             return Response(results.to_dict(orient="records"))

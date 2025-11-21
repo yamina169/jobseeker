@@ -4,7 +4,7 @@ import re, html
 from pathlib import Path
 
 
-INPUT = "data/offres_brutes/all_jobs_combined.csv " 
+INPUT = "data/all_jobs_combined.csv " 
 
 
 OUTPUT = "data/all_jobs_cleaned.csv"
