@@ -158,9 +158,14 @@ EMAIL_HOST_PASSWORD = 'mrqg plou wpcc felr'        # mot de passe d'application 
 
 
 ###Configurer AllAuth pour l’obligation de vérification email
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+# Pas besoin de vérification par email
+ACCOUNT_EMAIL_VERIFICATION = "none"
+# Le compte est déjà actif, donc pas de mandatory verification
+ACCOUNT_EMAIL_REQUIRED = True
+
+# Authentification
+AUTH_USER_MODEL = 'accounts.JobSeeker'
 
 
 

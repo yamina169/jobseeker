@@ -1,19 +1,11 @@
 from rest_framework import serializers
-from .models import JobSeeker
 from django.contrib.auth import authenticate
-
 from django.core.mail import send_mail
-from django.contrib.sites.shortcuts import get_current_site
-from django.urls import reverse
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.template.loader import render_to_string
-from django.contrib.auth.tokens import default_token_generator
-
-# Serializer pour inscription
 from django.template.loader import render_to_string
 from django.utils.timezone import now
+from .models import JobSeeker
 
+# Serializer pour inscription
 class JobSeekerSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobSeeker
@@ -24,30 +16,23 @@ class JobSeekerSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         user = JobSeeker(**validated_data)
         user.set_password(password)
-        user.is_active = False
+        user.is_active = True  # Activer le compte automatiquement
         user.save()
 
-        request = self.context.get('request')
-        token = default_token_generator.make_token(user)
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        link = f"http://127.0.0.1:8000/activate/{uid}/{token}/"
-
-        # Générer le contenu HTML
+        # Envoi d'un email de bienvenue (sans activation)
         html_content = render_to_string(
-            'emails/activate.html',
-            {'user': user, 'link': link, 'year': now().year}
+            'emails/welcome.html',  # Crée ce template
+            {'user': user, 'year': now().year}
         )
 
         send_mail(
-            'Active ton compte JobSeeker',
-            '',  # message texte vide, HTML sera utilisé
+            'Bienvenue sur JobSeeker !',
+            '',  # Message texte vide, HTML utilisé
             'ouniichayma@gmail.com',
             [user.email],
             html_message=html_content
         )
         return user
-
-
 
 # Serializer pour login
 class LoginSerializer(serializers.Serializer):
