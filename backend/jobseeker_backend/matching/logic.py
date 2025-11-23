@@ -1,13 +1,17 @@
+# -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
-import re, string, os
+import re
+import string
 import spacy
 import nltk
 from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import PyPDF2
+
 from tqdm import tqdm
+tqdm.pandas()
 
 # === Initialisation des modèles ===
 nltk.download("stopwords", quiet=True)
@@ -16,7 +20,6 @@ nlp = spacy.load("fr_core_news_sm")
 model = SentenceTransformer("TechWolf/JobBERT-v2")
 
 # === Fonctions utilitaires ===
-
 def clean_text(text):
     if not isinstance(text, str):
         return ""
@@ -25,16 +28,18 @@ def clean_text(text):
     return " ".join(tokens)
 
 def combine_fields(row):
+    """
+    Combiner les champs pertinents pour le matching depuis le fichier unifié.
+    """
     parts = []
     parts.append((row.get("title", "") or "") * 3)
     parts.append((row.get("skills", "") or "") * 2)
-    parts.append(row.get("description", "") or "")
+    parts.append(row.get("short_description", "") or "")
+    parts.append(row.get("full_description", "") or "")
     parts.append(row.get("experience", "") or "")
     parts.append(row.get("contract", "") or "")
     parts.append(row.get("region", "") or "")
     parts.append(row.get("salary", "") or "")
-    parts.append(row.get("job_type", "") or "")
-    parts.append(row.get("work_mode", "") or "")
     return " ".join(parts)
 
 def extract_pdf_text(file_path):
@@ -65,28 +70,36 @@ def extract_keywords_from_text(text):
     return set(words), numeric_values
 
 def compute_metadata_score(row, resume_text):
+    """
+    Bonus de score basé sur mots clés, contrat et salaire.
+    """
     bonus = 0.0
     resume_words, resume_nums = extract_keywords_from_text(resume_text)
     job_text = " ".join(map(str, row.to_list()))
     job_words, job_nums = extract_keywords_from_text(job_text)
 
+    # Mots-clés présents dans le CV
     if any(word in job_words for word in resume_words):
         bonus += 0.03
 
+    # Type de contrat
     common_contracts = ["cdi", "cdd", "stage", "freelance", "alternance", "intérim"]
     if any(c in resume_words and c in job_words for c in common_contracts):
         bonus += 0.03
 
+    # Nombres correspondants (ex: années d'expérience)
     for n in resume_nums:
         if n in job_nums:
             bonus += 0.02
             break
 
+    # Salaire mentionné
     if isinstance(row.get("salary"), str) and any(
         s in row["salary"].lower() for s in ["dt", "€", "usd", "dinar", "par mois", "par an"]
     ):
         bonus += 0.01
 
+    # Termes communs
     shared_terms = len(resume_words.intersection(job_words))
     if shared_terms > 30:
         bonus += 0.04
@@ -96,6 +109,9 @@ def compute_metadata_score(row, resume_text):
     return min(bonus, 0.1)
 
 def rank_jobs(resume_vec, job_vectors, jobs_df, resume_text, top_n=10):
+    """
+    Classement des jobs selon similarité sémantique + bonus méta.
+    """
     scores = cosine_similarity([resume_vec], job_vectors)[0]
     jobs_df = jobs_df.copy()
     jobs_df["semantic_score"] = scores
@@ -109,14 +125,25 @@ def rank_jobs(resume_vec, job_vectors, jobs_df, resume_text, top_n=10):
 
 # === Fonction principale ===
 def match_resume_with_jobs(resume_path, jobs_csv_path, top_n=10):
+    """
+    Matching d'un CV PDF avec le fichier unifié des offres.
+    """
     jobs_df = pd.read_csv(jobs_csv_path, dtype=str).fillna("")
-    cols = ["title", "company", "description", "skills", "experience",
-            "contract", "region", "salary", "job_type", "work_mode"]
-    jobs_df = jobs_df[cols].copy()
+
+    # Colonnes pertinentes pour le matching
+    cols = ["title", "company", "short_description", "full_description",
+            "skills", "experience", "contract", "region", "salary"]
+
+    for col in cols:
+        if col not in jobs_df.columns:
+            jobs_df[col] = ""
+
     jobs_df["full_text"] = jobs_df.apply(combine_fields, axis=1)
     jobs_df["clean_text"] = jobs_df["full_text"].apply(clean_text)
+
     job_vectors = model.encode(jobs_df["clean_text"].tolist(), batch_size=64, show_progress_bar=False)
 
+    # Extraire et encoder le CV
     resume_text = extract_pdf_text(resume_path)
     resume_vec = embed_resume(resume_text)
 

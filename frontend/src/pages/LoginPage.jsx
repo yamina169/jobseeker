@@ -34,10 +34,24 @@ const LoginPage = () => {
         "http://localhost:8000/api/accounts/login/",
         values
       );
-      localStorage.setItem("access_token", response.data.access);
-      localStorage.setItem("refresh_token", response.data.refresh);
-      localStorage.setItem("role", response.data.role);
-      navigate("/");
+
+      const { access, refresh, role, email } = response.data;
+
+      // Stockage des tokens et du rôle
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+
+      localStorage.setItem("role", role);
+      localStorage.setItem("email", email);
+
+      // Redirection selon le rôle
+      if (role === "admin") {
+        navigate("/dashboard/admin");
+      } else if (role === "jobseeker") {
+        navigate("/dashboard/jobseeker");
+      } else {
+        navigate("/"); // fallback au cas où le rôle est inconnu
+      }
     } catch (err) {
       setError(err.response?.data?.detail || "Login failed");
     }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import navLogo from "../../assets/images/header/logo.svg";
 
 import { IoMenuSharp, IoClose } from "react-icons/io5";
 import useScrollPosition from "../../hook/useScrollPosition";
@@ -18,8 +19,20 @@ const Header = () => {
     >
       <nav className="container mx-auto flex items-center justify-between py-4 px-4 md:px-0">
         {/* Logo */}
-
-        {/* Navigation Links */}
+        <Link to="/" className="flex items-center gap-2 cursor-pointer">
+          <div className="w-8 h-8 rounded-full bg-slate-600/20 flex items-center justify-center">
+            <img
+              src={navLogo}
+              alt="Logo"
+              className="w-6 h-6 object-cover"
+              loading="lazy"
+            />
+          </div>
+          <span className="font-redHatDisplay font-bold text-2xl leading-9 tracking-[-0.01em]">
+            CareerHunt
+          </span>
+        </Link>
+        ;{/* Navigation Links */}
         <ul className="hidden md:flex flex-1 justify-center gap-10">
           <li>
             <NavLink
@@ -65,7 +78,6 @@ const Header = () => {
             </NavLink>
           </li>
         </ul>
-
         {/* Buttons */}
         <div className="hidden md:flex items-center gap-4">
           <Link
@@ -79,7 +91,6 @@ const Header = () => {
             Sign Up
           </Link>
         </div>
-
         {/* Hamburger Menu */}
         <button
           className="md:hidden flex items-center justify-center w-10 h-10 bg-[#5533ff13] rounded-lg shadow-[0px_0px_5px_#5533ff04_inset] transition duration-300"

@@ -3,8 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .logic import match_resume_with_jobs
 import tempfile, os
-import os
 from django.conf import settings
+from pathlib import Path
+
 class ResumeMatchingAPI(APIView):
     """
     POST /api/matching/
@@ -22,7 +23,11 @@ class ResumeMatchingAPI(APIView):
             tmp_path = tmp.name
 
         try:
-            csv_path = os.path.join(settings.BASE_DIR, "data", "all_jobs_combined.csv")
+            # ← UTILISER LE FICHIER UNIFIÉ
+            csv_path = Path(settings.BASE_DIR) / "data" / "offres_unifiees.csv"
+            if not csv_path.exists():
+                return Response({"error": "Fichier unifié introuvable"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             results = match_resume_with_jobs(tmp_path, csv_path, top_n=10)
             os.remove(tmp_path)
             return Response(results.to_dict(orient="records"))

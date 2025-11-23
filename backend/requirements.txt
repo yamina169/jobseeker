@@ -12,5 +12,7 @@ scikit-learn
 PyPDF2
 tqdm
 selenium
+beautifulsoup4 
+lxml
 
 #python -m spacy download fr_core_news_sm

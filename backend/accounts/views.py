@@ -34,5 +34,8 @@ class LoginView(generics.GenericAPIView):
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
-            'role': user.role
+            'role': user.role,
+            'email': user.email,  # <-- ajout de l'email
+            'first_name': getattr(user, 'first_name', ''),  # optionnel si tu veux prénom
+            'last_name': getattr(user, 'last_name', '')     # optionnel si tu veux nom
         })

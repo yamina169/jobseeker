@@ -2,7 +2,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import UserDashboard from "./pages/dashboard/UserDashboard";
 import "./index.css";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import {
   createBrowserRouter,
@@ -62,6 +65,14 @@ const router = createBrowserRouter(
       <Route path="/register" element={<RegisterPage />} />
       {/* 404 */}
       <Route path="*" element={<PageNotFount />} />
+      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+        {/* Tu peux ajouter d'autres sous-routes admin ici */}
+      </Route>
+      <Route element={<ProtectedRoute allowedRoles={["jobseeker"]} />}>
+        <Route path="/dashboard/jobseeker" element={<UserDashboard />} />
+        {/* Tu peux ajouter d'autres sous-routes user ici */}
+      </Route>
     </Route>
   )
 );

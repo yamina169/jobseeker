@@ -6,7 +6,13 @@ const Layout = () => {
   const { pathname } = useLocation();
 
   // Pages où l'on cache Header + Footer
-  const hideLayout = pathname === "/login" || pathname === "/register";
+  const hideLayout = [
+    "/login",
+    "/register",
+    "/dashboard/admin",
+    "/dashboard/jobseeker",
+    // tu peux ajouter d'autres sous-routes si besoin
+  ].some((path) => pathname.startsWith(path));
 
   return (
     <>
