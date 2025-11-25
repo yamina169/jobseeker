@@ -92,13 +92,17 @@ def fusion_csv():
     # Lire le fichier existant pour limiter le nombre total
     if OUTPUT_FILE.exists():
         existing = pd.read_csv(OUTPUT_FILE, dtype=str, encoding="utf-8").fillna("")
-        merged = pd.concat([existing, merged], ignore_index=True, sort=False)
+        new_jobs = merged.copy()  # nouvelles offres à ajouter
+        total_after_merge = pd.concat([existing, new_jobs], ignore_index=True, sort=False)
 
-    # Limiter à MAX_JOBS : supprimer les plus anciens si nécessaire
-    if len(merged) > MAX_JOBS:
-        excess = len(merged) - MAX_JOBS
-        merged = merged.iloc[excess:].reset_index(drop=True)
+        if len(total_after_merge) > MAX_JOBS:
+            # Supprimer les plus anciens pour accueillir toutes les nouvelles offres
+            nb_new = len(new_jobs)
+            total_after_merge = total_after_merge.iloc[nb_new:].reset_index(drop=True)
 
+        merged = total_after_merge
+
+    # Recalculer les job_id
     merged["job_id"] = range(1, len(merged) + 1)
 
     # Réordonner colonnes : UNIFIED_COLUMNS en tête, puis le reste

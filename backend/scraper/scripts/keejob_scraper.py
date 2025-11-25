@@ -26,11 +26,11 @@ TOP_SECTORS = {
 }
 
 MAX_JOBS = {
-    "informatique / télécoms": 20,
-    "call center / télévente": 5,
-    "comptabilité / gestion / audit / finance / banque": 5,
-    "commerce / vente / distribution": 5,
-    "santé / paramédical / optique": 5
+    "informatique / télécoms": 1,
+    "call center / télévente": 1,
+    "comptabilité / gestion / audit / finance / banque": 1,
+    "commerce / vente / distribution": 1,
+    "santé / paramédical / optique": 1
 }
 
 # -------------------------------
