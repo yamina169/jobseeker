@@ -11,6 +11,9 @@ const Layout = () => {
     "/register",
     "/dashboard/admin",
     "/dashboard/jobseeker",
+    "/dashboard/jobsearch",
+    "/dashboard/career-tools", // correction ici
+
     // tu peux ajouter d'autres sous-routes si besoin
   ].some((path) => pathname.startsWith(path));
 

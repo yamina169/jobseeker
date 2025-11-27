@@ -37,9 +37,7 @@ const FeaturedJobs = () => {
                     {/* title , company & fav */}
                     <div className="flex justify-between w-full">
                       <div className="flex flex-col items-start gap-1">
-                        <h3 className="text-lg line-clamp-1 sm:text-xl font-semibold font-clashDisplay text-textDarkColor">
-                          {joblist.title}
-                        </h3>
+                        <h3 className="text-lg line-clamp-1 sm:text-xl font-semibold font-clashDisplay text-textDarkColor"></h3>
                         <p className="text-sm gap-[6px] flex items-center text-textGrayColor/80 font-semibold ">
                           <span>{joblist.company}</span>
                           <span className="w-1 h-1 rounded-full bg-textDarkColor/70"></span>

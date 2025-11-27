@@ -4,6 +4,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import UserDashboard from "./pages/dashboard/UserDashboard";
+import CareerTools from "./pages/dashboard/CareerTools";
+
 import "./index.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -24,6 +26,7 @@ import PageNotFount from "./components/PageNotFount/PageNotFount";
 import Services from "./pages/Services";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
+import JobSearch from "./pages/dashboard/JobSearch";
 
 // smooth scrolling
 import Lenis from "lenis";
@@ -71,7 +74,8 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<ProtectedRoute allowedRoles={["jobseeker"]} />}>
         <Route path="/dashboard/jobseeker" element={<UserDashboard />} />
-        {/* Tu peux ajouter d'autres sous-routes user ici */}
+        <Route path="/dashboard/jobsearch" element={<JobSearch />} />
+        <Route path="/dashboard/career-tools" element={<CareerTools />} />
       </Route>
     </Route>
   )

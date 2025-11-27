@@ -28,7 +28,7 @@ class ResumeMatchingAPI(APIView):
             if not csv_path.exists():
                 return Response({"error": "Fichier unifié introuvable"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            results = match_resume_with_jobs(tmp_path, csv_path, top_n=10)
+            results = match_resume_with_jobs(tmp_path, csv_path, threshold=0.6)
             os.remove(tmp_path)
             return Response(results.to_dict(orient="records"))
         except Exception as e:

@@ -26,7 +26,7 @@ const Sidebar = () => {
     {
       name: "Job Search",
       icon: <BriefcaseIcon className="h-5 w-5" />,
-      path: "/dashboard/user/job-search",
+      path: "/dashboard/JobSearch",
     },
     {
       name: "Profile",

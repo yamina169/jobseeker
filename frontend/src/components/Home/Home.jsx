@@ -39,29 +39,30 @@ const Home = () => {
     <section className="bg-[#F8F8FD] py-10 pb-0 lg:pt-5 lg:py-0 relative z-10 overflow-x-hidden">
       <div className="container relative z-10 w-full overflow-hidden">
         <div className="grid items-center w-full h-full grid-cols-1 gap-10 lg:grid-cols-2">
-          {/* Left Section */}
+          {/* Section gauche */}
           <div className="lg:self-start lg:pt-28">
             <div className="relative">
               <h1 className="text-3xl xl:text-5xl font-semibold text-textDarkColor mb-10">
-                Explore <span className="text-secondryColor">Jobs</span> and
-                grow your career
+                Explorez <span className="text-secondryColor">les emplois</span>{" "}
+                et développez votre carrière
               </h1>
               <img
                 src={Vector}
                 className="absolute -bottom-7 w-[200px] lg:w-[250px] right-10"
-                alt="Vector decoration"
+                alt="Décoration vectorielle"
               />
             </div>
 
             <p className="text-base leading-7 max-w-[90%] mb-3 text-textGrayColor">
-              A professional platform for the job seeker that passionate about
-              startups. Find your dream job easier.
+              Une plateforme professionnelle pour les chercheurs d'emploi
+              passionnés par les startups. Trouvez plus facilement votre emploi
+              de rêve.
             </p>
 
-            {/* Search Bar */}
+            {/* Barre de recherche */}
             <div className=" relative z-20 mt-5  mx-auto w-full p-4 rounded-lg shadow-gray-400/15 bg-white shadow-xl">
               <div className="flex flex-wrap items-center gap-5 lg:flex-nowrap">
-                {/* Job Title Input */}
+                {/* Input titre du poste */}
                 <div className="flex items-center w-full h-full gap-3 transition duration-300 border-b focus-within:border-primaryColor/70 group border-textGrayColor/20">
                   <div className="pb-3 transition duration-300 text-textGrayColor group-focus-within:text-primaryColor">
                     <RiSearchLine size={18} />
@@ -69,12 +70,14 @@ const Home = () => {
                   <input
                     type="text"
                     className="w-full pb-2 outline-none text-textDarkColor"
-                    placeholder="Job title or Keywords"
+                    placeholder="Titre du poste"
+                    disabled
                   />
                 </div>
-                {/* Location Input */}
+
+                {/* Input localisation */}
                 <div
-                  className={` relative flex items-center w-1/2 h-full border-b transition duration-300 ${
+                  className={` relative flex items-center w-2/3 h-full border-b transition duration-300 ${
                     isDropdownOpen
                       ? "border-primaryColor"
                       : "border-textGrayColor/20"
@@ -90,7 +93,7 @@ const Home = () => {
                     <SlLocationPin size={18} />
                   </div>
                   <div className="w-full h-full" ref={dropdownRef}>
-                    {/* Dropdown button */}
+                    {/* Bouton dropdown */}
                     <div
                       className="flex items-center justify-between group"
                       onClick={toggleDropdown}
@@ -99,8 +102,9 @@ const Home = () => {
                         type="text"
                         value={selectedLocation}
                         readOnly
-                        aria-label="Location"
+                        aria-label="Lieu"
                         className="w-full px-3 pb-2 outline-none cursor-pointer select-none text-textDarkColor"
+                        disabled
                       />
                       <div className="pb-3 text-textGrayColor">
                         <RiArrowDownSLine
@@ -111,7 +115,7 @@ const Home = () => {
                       </div>
                     </div>
 
-                    {/* Dropdown lists */}
+                    {/* Liste déroulante */}
                     <div
                       className={`absolute left-0 w-full bg-white shadow-xl transition-all duration-300 ease-in-out ${
                         isDropdownOpen
@@ -133,14 +137,20 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-                {/* Search Button */}
-                <button className="h-full p-3 bg-primaryColor whitespace-nowrap text-base font-medium cursor-pointer transition duration-300 hover:bg-primaryColor/90 hover:scale-[1.01] text-blue-50 rounded-md w-full lg:w-fit">
-                  Search my job
+
+                {/* Bouton recherche */}
+                <button
+                  className="h-full p-3 bg-primaryColor whitespace-nowrap text-base font-medium cursor-pointer transition duration-300 hover:bg-primaryColor/90 hover:scale-[1.01] text-blue-50 rounded-md w-full lg:w-fit"
+                  disabled
+                >
+                  Rechercher mon emploi
                 </button>
               </div>
             </div>
+
+            {/* Tags populaires */}
             <div className="mt-6 gap-4 flex text-base  text-textGrayColor/80 flex-col md:flex-row ">
-              <p className="text-[15px]"> Popular Tags:</p>
+              <p className="text-[15px]">Tags populaires :</p>
               <div className="flex flex-wrap gap-2.5">
                 {popularLists.map((list) => (
                   <span
@@ -153,20 +163,22 @@ const Home = () => {
               </div>
             </div>
           </div>
-          {/* Right Section */}
+
+          {/* Section droite */}
           <div className="flex-shrink-0 w-full ">
             <img
               src={HeroImage}
               className="lg:ml-auto lg:mx-0 block lg:flex w-full mx-auto h-full"
-              alt="Hero representation"
+              alt="Illustration"
             />
             <div className="w-[280px] h-[716px] rotate-[64deg] bg-white absolute right-0 -bottom-[455px]" />
           </div>
         </div>
+
         <img
           src={Pattern}
           className="absolute right-0 w-[860px] top-0 -z-10"
-          alt="Background pattern"
+          alt="Motif de fond"
         />
       </div>
     </section>

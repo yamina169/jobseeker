@@ -23,40 +23,29 @@ OUTPUT_FILE = OUTPUT_DIR / "emploitunisie.csv"
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 REQ_TIMEOUT = 10  # seconds
 
-# Mapping des catégories Emploitunisie → mots-clés
+# Mapping des catégories Emploitunisie → codes internes
 JOB_CATEGORIES = {
     "Informatique, nouvelles technologies": "informatique",
     "Télémarketing, téléassistance": "telemarketing",
     "Gestion, comptabilité, finance": "finance",
     "Commercial, vente": "vente",
-    "Métiers de la santé et du social": "sante",
-}
-
-# Regroupement en 3 secteurs principaux
-MAIN_SECTORS = {
-    "IT": ["Informatique, nouvelles technologies"],
-    "Management": ["Management, direction générale", "Juridique", "RH, formation"],
-    "Commercial": [
-        "Commercial, vente",
-        "Achats",
-        "Gestion, comptabilité, finance",
-        "Marketing, communication",
-        "Télémarketing, téléassistance",
-        "Secrétariat, assistanat",
-        "Tourisme, hôtellerie, restauration",
-        "Transport, logistique",
-        "Métiers de la santé et du social",
-        "Métiers des services",
-        "Métiers du BTP",
-        "Production, maintenance, qualité"
-    ]
+    "Métiers de la santé et du social": "santé",
+    "Management, direction générale": "management",
+    "Juridique": "juridique",
+    "RH, formation": "rh",
+    "Achats": "achats",
+    "Marketing, communication": "marketing",
+    "Secrétariat, assistanat": "secretariat",
+    "Tourisme, hôtellerie, restauration": "tourisme",
+    "Transport, logistique": "logistique",
+    "Métiers des services": "services",
+    "Métiers du BTP": "btp",
 }
 
 MAX_JOBS_PER_CATEGORY = 5
 MAX_TOTAL = 500
 MAX_WORKERS = 8
 POLL_SLEEP = (0.2, 0.3)
-
 
 # -----------------------------
 # Helpers
@@ -69,13 +58,11 @@ def abs_url(href):
         return ""
     return href if href.startswith("http") else urljoin(BASE_DOMAIN, href)
 
-def map_to_main_sector(sector_name):
-    for main, sub_list in MAIN_SECTORS.items():
-        for sub in sub_list:
-            if sub.lower() in sector_name.lower():
-                return main
-    return "Autre"
-
+def map_to_main_sector(category_name):
+    """
+    Retourne directement le code interne de la catégorie.
+    """
+    return JOB_CATEGORIES.get(category_name, "autre")
 
 # -----------------------------
 # Parsing
@@ -126,14 +113,12 @@ def parse_list_card(card):
         "url": url,
     }
 
-
 def fetch_list_page(session, keyword, page):
     url = BASE_LIST_URL.format(keyword, page)
     r = session.get(url, headers=HEADERS, timeout=REQ_TIMEOUT)
     r.raise_for_status()
     soup = BeautifulSoup(r.text, "html.parser")
     return soup.select("div.card.card-job")
-
 
 def fetch_job_detail(session, job):
     job_url = job.get("url", "")
@@ -150,7 +135,6 @@ def fetch_job_detail(session, job):
         job["full_description"] = ""
     return job
 
-
 # -----------------------------
 # CSV utilities
 # -----------------------------
@@ -164,7 +148,6 @@ def load_existing_jobs():
                 jobs.append(row)
                 existing_urls.add(row.get("url", ""))
     return jobs, existing_urls
-
 
 def save_jobs(jobs):
     if len(jobs) > MAX_TOTAL:
@@ -183,7 +166,6 @@ def save_jobs(jobs):
         writer.writeheader()
         writer.writerows(jobs)
     print(f"✔ {len(jobs)} jobs sauvegardés dans {OUTPUT_FILE}")
-
 
 # -----------------------------
 # Core scraping logic
@@ -207,7 +189,7 @@ def scrape_category_fast(session, keyword, category_name, existing_urls):
             url = base.get("url", "")
             if not url or url in existing_urls:
                 continue
-            # Mapper vers secteur principal
+            # Mapper directement par catégorie
             base["sector"] = map_to_main_sector(category_name)
             new_jobs.append(base)
             existing_urls.add(url)
@@ -227,7 +209,6 @@ def scrape_category_fast(session, keyword, category_name, existing_urls):
 
     print(f"→ {len(detailed)} nouveaux jobs récupérés pour {category_name}")
     return detailed
-
 
 def main():
     start = time.time()
@@ -249,7 +230,6 @@ def main():
     save_jobs(all_jobs)
     elapsed = time.time() - start
     print(f"Terminé — {added} nouveau(x) job(s) ajoutés. Temps: {elapsed:.1f}s")
-
 
 if __name__ == "__main__":
     main()
