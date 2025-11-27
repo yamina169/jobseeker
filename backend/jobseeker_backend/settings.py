@@ -49,7 +49,9 @@ INSTALLED_APPS = [
 
     # Mon app
     'accounts',
-    'scraper',  
+    'scraper',
+    'cover_letter_generator',
+  
 
 ]
 

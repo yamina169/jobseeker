@@ -14,5 +14,10 @@ tqdm
 selenium
 beautifulsoup4 
 lxml
+streamlit==1.26.0
+ollama==0.1.6
+fpdf==1.7.2
+Pillow==9.5.0
+requests==2.31.0
 
 #python -m spacy download fr_core_news_sm

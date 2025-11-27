@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cover Letter Generator</title>
+  </head>
+  <body>
+    <h1>Generate Cover Letter</h1>
+
+    {% if error %}
+    <p style="color: red">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <label>Full Name:</label><br />
+      <input type="text" name="name" /><br /><br />
+
+      <label>Target Role:</label><br />
+      <input type="text" name="job_role" /><br /><br />
+
+      <label>Work Experience:</label><br />
+      <textarea name="experience" rows="5" cols="50"></textarea><br /><br />
+
+      <label>Skills (comma-separated):</label><br />
+      <input type="text" name="skills" /><br /><br />
+
+      <label>Ollama Model:</label><br />
+      <input type="text" name="model_name" value="gemma3" /><br /><br />
+
+      <input type="submit" value="Generate Cover Letter" />
+    </form>
+
+    {% if cover_letter %}
+    <h2>Generated Cover Letter</h2>
+    <pre>{{ cover_letter }}</pre>
+    {% if pdf_url %}
+    <a href="{{ pdf_url }}" target="_blank">Download PDF</a>
+    {% endif %} {% endif %}
+  </body>
+</html>
